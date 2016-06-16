@@ -1,21 +1,43 @@
-// var states = states_json2()
-// states[0].features[0].properties.density
 var counties = counties_json2()
 var criteria = ["Unemployment", "Per capita income"]
 var selected_criteria = "Unemployment"
+var data
 
 $(document).ready(function(){
 
+ 	// parse uploaded csv into data variable
+	function handleFileSelect(evt) {
+		var file = evt.target.files[0];
+
+		Papa.parse(file, {
+			header: true,
+			dynamicTyping: true,
+			complete: function(results) {
+				data = results;
+			}
+		});
+	}
+
+	$("#csv-file").change(handleFileSelect);
+
+	// show tabs when clicked
+	$(".nav-tabs a").click(function(){
+      	$(this).tab('show')
+  	});
+
+	// create map
 	var map = L.map('map').setView([37.8, -96], 4)
 	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 		{
 		attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
-		// maxZoom: 17,
-		// minZoom: 9
 		}).addTo(map)
-	// L.geoJson(counties).addTo(map);
 
-	// make dropdown menu to select distress criteria
+	// resize map because it's created in hidden panel initially
+	$(".nav-tabs a").on("shown.bs.tab", function() {
+		map.invalidateSize();
+	});
+
+	// make dropdown menu to select distress criteria for map
 	function build_criteria_select() {
 		for ( i in criteria){
 			criteria_string = criteria[i];	
@@ -45,6 +67,7 @@ $(document).ready(function(){
 	     //                  '#FFEDA0';
 	}
 
+	// initially color map polygons depending on criteria selected
 	function style(feature) {
 		if(selected_criteria == "Unemployment"){
 			return {
@@ -66,6 +89,7 @@ $(document).ready(function(){
 		}
 	}
 
+	// update color for map polygons depending on criteria selected
 	function style_polygons() {
 		geojson.eachLayer(function (layer) {
 			if(selected_criteria == "Unemployment"){
@@ -117,6 +141,8 @@ $(document).ready(function(){
  //    		map.fitBounds(e.target.getBounds());
 	// }
 
+	// popup on mouse click
+
 	var popup = L.popup();
 
 	function onMapClick(e) {
@@ -134,6 +160,7 @@ $(document).ready(function(){
 		})
 	}
 
+	// assign functions to onEachFeature for mouseover, mouseout, click
 	function onEachFeature(feature, layer) {
 		layer.on({
 			mouseover: highlightFeature,
@@ -143,12 +170,11 @@ $(document).ready(function(){
 		})
 	}
 
+	// add polygons to map
 	geojson = L.geoJson(counties, {
 		style: style,
 		onEachFeature: onEachFeature
 	}).addTo(map)
-
-	console.log(geojson)
 
 	// create custom control box when hovering over state
 	var info = L.control();
