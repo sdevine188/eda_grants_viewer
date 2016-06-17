@@ -11,10 +11,13 @@
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
             <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.11/js/jquery.dataTables.min.js"></script>
+            <!--<script src="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css"></script>-->
             <script src="counties_json2.js"></script>
             <script src="eda_grants_viewer.js"></script>
             <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,800,800italic,600italic,600,400italic,300italic,300' rel='stylesheet' type='text/css'>
             <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"/>
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css"/>
             <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
             <link rel="stylesheet" href="eda_grants_viewer.css">
       </head>
@@ -35,14 +38,19 @@
 			<div id="nav_tab_data" class="tab-pane fade in active">
 				<div>
 		            	<img class="alignimg" src="eda_logo.jpg" height="150" width="200">
-		            	<h1 class="alignleft">County Economic Distress Map<br /><span style="font-size:.8em; font-weight:normal;">EDA Performance and National Programs</span></h1>
-	            	</div>
-	            	<div>
-	            		<p>
-	            			<input type="file" id="csv-file" name="files"/>
-	            		</p class="alignright">
+		            	<h1 class="alignleft">Grants Viewer<br /><span style="font-size:.8em; font-weight:normal;">EDA Performance and National Programs</span></h1>
 	            	</div>
 		            <div style="clear: both;"></div>
+		            <br>
+		            <div>
+	            		<p>
+	            			<input type="file" id="csv-file" name="files"/>
+	            		</p>
+	            	</div>
+	            	<div style="clear: both;"></div>
+	            	<div>
+	            		<table id="csv-table" class="display" width="100%"></table>      
+	            	</div>
 		      </div>
 
 		      <!-- query tab -->
