@@ -46,92 +46,6 @@ var data2 = [
 
 $(document).ready(function(){
 
-	// var test_array = [["val1", "val2", "val3"], ["val4", "val5", "val6"]]
-	// // console.log(test_array)
-	// test_array = [test_array, ["val7", "val8", "val9"]]
-	// console.log(test_array)
-
-	// var fakeArray = { "length": 2, 0: "Addy", 1: "Subtracty" };
- // 	console.log(fakeArray)
-
-	// // Therefore, convert it to a real array
-	// var realArray = $.makeArray( fakeArray )
-	// console.log(realArray)
-
-	// var o = [{
-	// 	    "proj_address": "Beattyville, KY, 00000",
-	// 	    "Proj.ST.Abbr": "KY",
-	// 	    "Proj.ZIP": "00000"
-	// 	  },
-	// 	  {
-	// 	    "proj_address": "Fargo, ND, 00000",
-	// 	    "Proj.ST.Abbr": "ND",
-	// 	    "Proj.ZIP": "00000"
-	// 	  },
-	// 	  {
-	// 	    "proj_address": "Shawneetown, IL, 62984",
-	// 	    "Proj.ST.Abbr": "IL",
-	// 	    "Proj.ZIP": "62984"
-	// 	  }]
-
-	// var data_array = []
-	// for(i = 0; i < o.length; i++){
-	// 	// console.log(_.values(o[i]))
-	// 	data_array.push(_.values(o[i]))
-	// 	// eval("var temp" + i + "=" + temp_val + ";");
-	// 	console.log(data_array)
-	// }
-
-	// var pageNumber = 1;
-	// eval("var text" + pageNumber + "=123;")
-	// console.log(text1)
-	// console.log(o)
-	// var o2 = _.map(o, function(num, key) { num })
-	// console.log(o2)
-
-	// var test = _.map({one: 1, two: 2, three: 3}, function(num, key){ return num * 3})
-	// var test = _.map([{
-	// 	    "proj_address": "Beattyville, KY, 00000",
-	// 	    "Proj.ST.Abbr": "KY",
-	// 	    "Proj.ZIP": "00000"
-	// 	  }, {
-	// 	    "proj_address": "Fargo, ND, 00000",
-	// 	    "Proj.ST.Abbr": "ND",
-	// 	    "Proj.ZIP": "00000"
-	// 	  }], function(val){ return _.values})
-
-	// console.log(test)
-
-	// var test2 = _.map(test, function(val, key){return val})
-	// console.log(test2)
-	// console.log(data2)
-
-	// var o = {"0":"1","1":"2","2":"3","3":"4"};
-	// var o = {"0":"1","1":"2","2":"3","3":"4"};
-	// console.log(o)
-
-	// var o_array = $.makeArray(o)
-	// console.log(o_array)
-
-	// var arr = $.map(o, function(el) { return el; })
-	// console.log(arr)
-
-
-	// $('#csv-table').DataTable({
- //      	data: data,
- //      	columnDefs: [
- //        		{ targets: [0, 5], visible: true}
- //        	]
- //      	// columns: [
-	//       //       { title: "Name" },
-	//       //       { title: "Position" },
-	//       //       { title: "Office" },
-	//       //       { title: "Extn." },
-	//       //       { title: "Start date" },
-	//       //       { title: "Salary" }
- //       //  	]
- //    	});
-
 	// parse uploaded csv into data variable
 	function handleFileSelect(evt) {
 		var file = evt.target.files[0];
@@ -140,46 +54,48 @@ $(document).ready(function(){
 			header: true,
 			dynamicTyping: true,
 			complete: function(results) {
-				console.log("in parse function");
 				csv_data = results.data;
-				console.log(csv_data.length)
 				convert_obj_to_array()
-				// console.log(data_array)
+				destroy_table()
 				create_table()
-				// data = results.toArrays()
-				// table = $('#csv-table').DataTable({
-			 //      	data: data,
-			 //      	columnDefs: [
-			 //        		{ targets: [0, 5], visible: true}
-			 //        	]
-				// })
-				// table.destroy()
-				// table.clear().draw()
-				// table.row.add(data)
-				// create_table()
+				filter_table()
 			}
 		});
 	}
 
 	function convert_obj_to_array(data) {
-		console.log("in convert function")
-		console.log(csv_data.length)
 		for(i = 0; i < csv_data.length - 1; i++){
 			data_array.push(_.values(csv_data[i]))
 		}
 	}
 
+	function destroy_table() {
+		if(!(table == null)) {
+			table.destroy()
+		}
+	}
+
 	function create_table() {
-		console.log("in create_table function")
 		table = $('#csv-table').DataTable({
 		      	data: data_array,
+		      	stateSave: true,
 		      	columnDefs: [
 		        		{ targets: [0, 2], visible: true}
 		        	]
 		})
 	}
 
-	// create_table()
+	function filter_table() {
+		var num_columns_disp = table.columns().header().length
+		for (i = 0; i < num_columns_disp; i++){
+			yadcf.init(table, [{
+				column_number: i,
+				filter_type: "text",
+				exclude: true,
+				exclude_label: '!(not)'
+			}])
+		} 
+	}
 
 	$("#csv-file").change(handleFileSelect);
 
