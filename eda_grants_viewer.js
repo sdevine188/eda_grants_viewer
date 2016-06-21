@@ -2,8 +2,10 @@ var counties = counties_json2()
 var criteria = ["Unemployment", "Per capita income"]
 var selected_criteria = "Unemployment"
 var csv_data
-var data_values_array_for_table = []
 var filtered_csv_data_for_table = []
+var display_columns = []
+var column_def_for_table = []
+var data_values_array_for_table = []
 var table
 
 $(document).ready(function(){
@@ -18,7 +20,9 @@ $(document).ready(function(){
 			complete: function(results) {
 				csv_data = []
 				csv_data = results.data
+				create_display_columns()
 				filter_csv_data_for_table()
+				create_column_def()
 				convert_obj_to_array()
 				destroy_table()
 				create_table()
@@ -27,10 +31,23 @@ $(document).ready(function(){
 		});
 	}
 
+	function create_display_columns() {
+		display_columns = ["Control.", "Status", "FY", "Appr.Desc", "Best.EDA..", "Appl.Short.Name",
+			"Project.Short.Descrip", "Initiatives", "Proj.ST.Abbr", "RO.."]
+	}
+
 	function filter_csv_data_for_table() {
-		var display_columns = ["Appropriation", "FY", "Comments", "SIC1"]
 		for(i = 0; i < csv_data.length; i++) {
 			filtered_csv_data_for_table.push(_.pick(csv_data[i], display_columns))
+		}
+	}
+
+	function create_column_def() {
+		for(i = 0; i < display_columns.length; i++) {
+			var individual_column_def = {}
+			individual_column_def.targets = i
+			individual_column_def.title = display_columns[i]
+			column_def_for_table.push(individual_column_def)
 		}
 	}
 
@@ -46,14 +63,13 @@ $(document).ready(function(){
 		}
 	}
 
-
 	function create_table() {
 		table = $('#csv-table').DataTable({
 		      	data: data_values_array_for_table,
 		      	stateSave: true,
-		      	columnDefs: [
-		        		{ targets: [0, 2], visible: true}
-		        	]
+		      	lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+		      	pageLength: 5,
+		      	columnDefs: column_def_for_table
 		})
 	}
 
