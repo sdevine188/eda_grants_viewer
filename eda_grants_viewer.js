@@ -16,8 +16,9 @@ $(document).ready(function(){
 			header: true,
 			dynamicTyping: true,
 			complete: function(results) {
+				csv_data = []
 				csv_data = results.data
-				// filter_csv_data_for_table()
+				filter_csv_data_for_table()
 				convert_obj_to_array()
 				destroy_table()
 				create_table()
@@ -26,24 +27,18 @@ $(document).ready(function(){
 		});
 	}
 
-	// function filter_csv_data_for_table() {
-	// 	var display_columns = ["Appropriation", "FY", "Comments", "SIC1"]
-	// 	for(i = 0; i < csv_data.length; i++) {
-	// 		filtered_csv_data_for_table.push(_.pick(csv_data[i], display_columns))
-	// 	}
-	// }
-
-	function convert_obj_to_array(data) {
-		for(i = 0; i < csv_data.length - 1; i++){
-			data_values_array_for_table.push(_.values(csv_data[i]))
+	function filter_csv_data_for_table() {
+		var display_columns = ["Appropriation", "FY", "Comments", "SIC1"]
+		for(i = 0; i < csv_data.length; i++) {
+			filtered_csv_data_for_table.push(_.pick(csv_data[i], display_columns))
 		}
 	}
 
-	// function convert_obj_to_array(data) {
-	// 	for(i = 0; i < csv_data.length - 1; i++){
-	// 		data_values_array_for_table.push(_.values(filtered_csv_data_for_table[i]))
-	// 	}
-	// }
+	function convert_obj_to_array(data) {
+		for(i = 0; i < csv_data.length - 1; i++){
+			data_values_array_for_table.push(_.values(filtered_csv_data_for_table[i]))
+		}
+	}
 
 	function destroy_table() {
 		if(!(table == null)) {
