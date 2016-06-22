@@ -20,6 +20,7 @@ $(document).ready(function(){
 			complete: function(results) {
 				csv_data = []
 				csv_data = results.data
+				// rename_variables()
 				create_display_columns()
 				filter_csv_data_for_table()
 				create_column_def()
@@ -31,9 +32,31 @@ $(document).ready(function(){
 		});
 	}
 
+	// function rename_variables() {
+	// 	var old_names = ["Control.", "Best.EDA..", "Cons.Non", "Total.Project..", "CFDA..", "Appl.Cnty.Name",
+	// 		"Appl..Zip", "Proj.ST.Abbr", "RO..", "IRS..", "DUNS..", "Proj.Comp..Code", "DEC.Act",
+	// 		"PPR.Act", "X.PRD._Action.Code", "X.PRD._Date", "X.PCL._Date", "X.PPS._Date", "X.PPE._Date",
+	// 		"X.PX1._Date", "X.PX2._Date", "X.GSD._Date", "X.GSE._Date"]
+	// 	var new_names = ["Control.No.", "EDA.Funding", "Construction", "Total.Proj.Cost", 
+	// 		"CFDA", "Appl.County.Name", "Appl.ZIP", "Proj.State.Abbr", "Region.Code", "IRS", "DUNS",
+	// 		"Proj.Comp.Code", "DEC.Code", "PPR.Code", "PRD.Code", "PRD.Date", "PCL.Date", "PPS.Date",
+	// 		"PPE.Date", "PX1.Date", "PX2.Date", "GSD.Date", "GPE.Date"]
+	// 	for(i = 0; i < csv_data.length; i++) {
+	// 		console.log("looping through rows")
+	// 		for(name = 0; name < new_names.length; name++) {
+	// 			console.log("renaming" + name)
+	// 			old_key_value = _.pick(csv_data[i], old_names[name])
+	// 			csv_data[i] = _.omit(csv_data[i], old_names[name])
+	// 			old_value = _.values(old_key_value)
+	// 			csv_data[i][new_names[name]] = old_value
+	// 		}
+	// 	}
+	// }
+
 	function create_display_columns() {
-		display_columns = ["Control.", "Status", "FY", "Appr.Desc", "Best.EDA..", "Appl.Short.Name",
-			"Project.Short.Descrip", "Initiatives", "Proj.ST.Abbr", "RO.."]
+		// display_columns = ["Control.", "Status", "FY", "Appr.Desc", "Best.EDA..", "Appl.Short.Name",
+		// 	"Project.Short.Descrip", "Initiatives", "Proj.ST.Abbr", "RO.."]
+		display_columns = ["Status", "FY", "Appropriation"]
 	}
 
 	function filter_csv_data_for_table() {
