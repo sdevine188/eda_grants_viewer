@@ -4,7 +4,16 @@ body {
 	font-family: 'Open Sans', sans-serif;
 }
 
-.nav_container {
+h1 {
+    text-transform: capitalize;
+}
+
+.container {
+	width: 300px; 
+	margin: 30px 0 0 30px;
+}
+
+.navbar_container {
 	font-family: 'Open Sans', sans-serif;
 	padding-bottom: 15px;
 }
