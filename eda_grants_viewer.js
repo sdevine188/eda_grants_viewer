@@ -4,10 +4,12 @@ var selected_criteria = "Unemployment"
 var csv_data
 var filtered_csv_data_for_table = []
 var variable_list = []
+var variable_obj = []
 var display_columns = []
 var column_def_for_table = []
 var data_values_array_for_table = []
 var table
+
 
 $(document).ready(function(){
 
@@ -36,7 +38,20 @@ $(document).ready(function(){
 		// display_columns = ["Control.", "Status", "FY", "Appr.Desc", "Best.EDA..", "Appl.Short.Name",
 		// 	"Project.Short.Descrip", "Initiatives", "Proj.ST.Abbr", "RO.."]
 		variable_list = _.allKeys(csv_data[1])
+		variable_obj = _.map(variable_list, function(var_name) {
+			return {
+				name: var_name
+			}
+		})
 		display_columns = ["Status", "FY", "Appropriation"]
+		var $select = $('#select_col_display').selectize({
+			maxItems: null,
+			valueField: "name",
+			labelField: "name",
+			searchField: "name",
+			options: variable_obj,
+			create: false
+		})
 	}
 
 	function filter_csv_data_for_table() {
@@ -90,6 +105,8 @@ $(document).ready(function(){
 
 	$("#csv-file").change(handleFileSelect);
 
+
+
 	// $(function() {
 	// 	$('#select_col_display').selectize({
 	// 		delimiter: ',',
@@ -104,19 +121,41 @@ $(document).ready(function(){
 	// 	});
 	// });
 
-	var $select = $('#select_col_display').selectize({
-		maxItems: null,
-		valueField: 'id',
-		labelField: 'title',
-		searchField: 'title',
-		options: [
-			{id: 1, title: 'Spectrometer', url: 'http://en.wikipedia.org/wiki/Spectrometers'},
-			{id: 2, title: 'Star Chart', url: 'http://en.wikipedia.org/wiki/Star_chart'},
-			{id: 3, title: 'Electrical Tape', url: 'http://en.wikipedia.org/wiki/Electrical_tape'}
-		],
-		create: false
-	});
+	// var $select = $('#select_col_display').selectize({
+	// 	maxItems: null,
+	// 	valueField: 'id',
+	// 	labelField: 'title',
+	// 	searchField: 'title',
+	// 	options: [
+	// 		{id: 1, title: 'Spectrometer', url: 'http://en.wikipedia.org/wiki/Spectrometers'},
+	// 		{id: 2, title: 'Star Chart', url: 'http://en.wikipedia.org/wiki/Star_chart'},
+	// 		{id: 3, title: 'Electrical Tape', url: 'http://en.wikipedia.org/wiki/Electrical_tape'}
+	// 	],
+	// 	create: false
+	// });
 
+	// var $select = $('#select_col_display').selectize({
+	// 	maxItems: null,
+	// 	valueField: "name",
+	// 	labelField: "name",
+	// 	searchField: "name",
+	// 	options: [
+	// 		{name: "test"},
+	// 		{name: "test2"},
+	// 		{name: "test3"}
+	// 	],
+	// 	create: false
+	// });
+	
+	// var $select = $('#select_col_display').selectize({
+	// 	maxItems: null,
+	// 	valueField: "name",
+	// 	labelField: "name",
+	// 	searchField: "name",
+	// 	options: test_names,
+	// 	create: false
+	// })
+	
 	// show tabs when clicked
 	$(".nav-tabs a").click(function(){
       	$(this).tab('show')
@@ -142,7 +181,7 @@ $(document).ready(function(){
 		}
 	}
 
-	build_criteria_select()
+	// build_criteria_select()
 
 	// update map when criteria drop down is changed
 	$('.criteria').on("change", function() {
