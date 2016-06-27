@@ -35,32 +35,51 @@ $(document).ready(function(){
 	}
 
 	function create_display_columns() {
-		// display_columns = ["Control.", "Status", "FY", "Appr.Desc", "Best.EDA..", "Appl.Short.Name",
-		// 	"Project.Short.Descrip", "Initiatives", "Proj.ST.Abbr", "RO.."]
+		console.log("create_display_columns")
 		variable_list = _.allKeys(csv_data[1])
 		variable_obj = _.map(variable_list, function(var_name) {
 			return {
 				name: var_name
 			}
 		})
-		display_columns = ["Status", "FY", "Appropriation"]
+		display_columns = ["Control.No.", "Status", "FY", "Program", "EDA.Funding", "Appl.Short.Name", "Project.Short.Descrip",
+			"Initiatives", "Appl.State.Abbr"]
 		var $select = $('#select_col_display').selectize({
 			maxItems: null,
 			valueField: "name",
 			labelField: "name",
 			searchField: "name",
+			sortField: {
+						field: 'name',
+						direction: 'asc'
+					},
 			options: variable_obj,
-			create: false
+			items: display_columns,
+			create: false,
+			onChange:function(value){
+				display_columns = $('#select_col_display').selectize()[0].selectize.getValue()
+				display_columns = display_columns.split(",")
+				filter_csv_data_for_table()
+				create_column_def()
+				convert_obj_to_array()
+				destroy_table()
+				create_table()
+				// add_filters()
+			}
 		})
 	}
 
 	function filter_csv_data_for_table() {
+		console.log("filter_csv")
+		filtered_csv_data_for_table = []
 		for(i = 0; i < csv_data.length; i++) {
 			filtered_csv_data_for_table.push(_.pick(csv_data[i], display_columns))
 		}
 	}
 
 	function create_column_def() {
+		console.log("create_column_def")
+		column_def_for_table = []
 		for(i = 0; i < display_columns.length; i++) {
 			var individual_column_def = {}
 			individual_column_def.targets = i
@@ -70,18 +89,23 @@ $(document).ready(function(){
 	}
 
 	function convert_obj_to_array(data) {
+		console.log("convert_obj_to_array")
+		data_values_array_for_table = []
 		for(i = 0; i < csv_data.length - 1; i++){
 			data_values_array_for_table.push(_.values(filtered_csv_data_for_table[i]))
 		}
 	}
 
 	function destroy_table() {
+		console.log("destroy_table")
 		if(!(table == null)) {
 			table.destroy()
+			$('#csv-table').empty()
 		}
 	}
 
 	function create_table() {
+		console.log("create_table")
 		table = $('#csv-table').DataTable({
 		      	data: data_values_array_for_table,
 		      	stateSave: true,
@@ -92,6 +116,7 @@ $(document).ready(function(){
 	}
 
 	function add_filters() {
+		console.log("add_filters")
 		var num_columns_disp = table.columns().header().length
 		for (i = 0; i < num_columns_disp; i++){
 			yadcf.init(table, [{
@@ -103,58 +128,7 @@ $(document).ready(function(){
 		} 
 	}
 
-	$("#csv-file").change(handleFileSelect);
-
-
-
-	// $(function() {
-	// 	$('#select_col_display').selectize({
-	// 		delimiter: ',',
-	// 		persist: false,
-	// 		options: ["test", "test2", "test3"]
-	// 		// create: function(input) {
-	// 		// 	return {
-	// 		// 		value: input,
-	// 		// 		text: input
-	// 		// 	}
-	// 		// }
-	// 	});
-	// });
-
-	// var $select = $('#select_col_display').selectize({
-	// 	maxItems: null,
-	// 	valueField: 'id',
-	// 	labelField: 'title',
-	// 	searchField: 'title',
-	// 	options: [
-	// 		{id: 1, title: 'Spectrometer', url: 'http://en.wikipedia.org/wiki/Spectrometers'},
-	// 		{id: 2, title: 'Star Chart', url: 'http://en.wikipedia.org/wiki/Star_chart'},
-	// 		{id: 3, title: 'Electrical Tape', url: 'http://en.wikipedia.org/wiki/Electrical_tape'}
-	// 	],
-	// 	create: false
-	// });
-
-	// var $select = $('#select_col_display').selectize({
-	// 	maxItems: null,
-	// 	valueField: "name",
-	// 	labelField: "name",
-	// 	searchField: "name",
-	// 	options: [
-	// 		{name: "test"},
-	// 		{name: "test2"},
-	// 		{name: "test3"}
-	// 	],
-	// 	create: false
-	// });
-	
-	// var $select = $('#select_col_display').selectize({
-	// 	maxItems: null,
-	// 	valueField: "name",
-	// 	labelField: "name",
-	// 	searchField: "name",
-	// 	options: test_names,
-	// 	create: false
-	// })
+	$("#csv-file").change(handleFileSelect)
 	
 	// show tabs when clicked
 	$(".nav-tabs a").click(function(){
