@@ -43,6 +43,9 @@ $(document).ready(function(){
 		})
 		display_columns = ["Control.No.", "Status", "FY", "Program", "EDA.Funding", "Appl.Short.Name", "Project.Short.Descrip",
 			"Initiatives", "Appl.State.Abbr"]
+		// display_columns = ["proj_address", "Proj.ZIP", "Proj.ST.Abbr"]
+		// display_columns = ["Status", "FY", "Appropriation"]
+		// display_columns = ["Appropriation"]
 		var $select = $('#select_col_display').selectize({
 			maxItems: null,
 			valueField: "name",
@@ -55,16 +58,6 @@ $(document).ready(function(){
 			options: variable_obj,
 			items: display_columns,
 			create: false
-			// onChange:function(value){
-			// 	display_columns = $('#select_col_display').selectize()[0].selectize.getValue()
-			// 	display_columns = display_columns.split(",")
-			// 	filter_csv_data_for_table()
-			// 	create_column_def()
-			// 	convert_obj_to_array()
-			// 	destroy_table()
-			// 	create_table()
-			// 	add_filters()
-			// }
 		})
 	}
 
@@ -102,7 +95,7 @@ $(document).ready(function(){
 	function create_table() {
 		table = $('#csv-table').DataTable({
 		      	data: data_values_array_for_table,
-		      	stateSave: true,
+		      	// stateSave: true,
 		      	lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
 		      	pageLength: 5,
 		      	columnDefs: column_def_for_table
@@ -111,14 +104,12 @@ $(document).ready(function(){
 
 	function add_filters() {
 		var num_columns_disp = table.columns().header().length
+		var yadcf_column_array = []
 		for (i = 0; i < num_columns_disp; i++){
-			yadcf.init(table, [{
-				column_number: i,
-				filter_type: "text",
-				exclude: true,
-				exclude_label: '!(not)'
-			}])
-		} 
+			yadcf_column_obj = {column_number: i, filter_type: "text", exclude: true, exclude_label: "!(not)"}
+			yadcf_column_array.push(yadcf_column_obj)
+		}
+		yadcf.init(table, yadcf_column_array)
 	}
 
 	function display_selected_columns() {
