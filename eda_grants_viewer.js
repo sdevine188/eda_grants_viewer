@@ -9,6 +9,8 @@ var display_columns = []
 var column_def_for_table = []
 var data_values_array_for_table = []
 var table
+var converted_csv
+var fake_data
 
 
 $(document).ready(function(){
@@ -122,6 +124,36 @@ $(document).ready(function(){
 		create_table()
 		add_filters()
 	}
+
+	function download_csv() {
+		console.log("download csv function")
+		fake_data = [
+			{
+				"Column 1": "foo",
+				"Column 2": "bar"
+			},
+			{
+				"Column 1": "abc",
+				"Column 2": "def"
+			}
+		]
+
+		converted_csv = Papa.unparse(fake_data)
+
+		var csvData = new Blob([converted_csv], {type: 'text/csv;charset=utf-8;'});
+		var csvURL =  null;
+		if (navigator.msSaveBlob) {
+		    csvURL = navigator.msSaveBlob(csvData, 'download.csv');
+		} else {
+		    csvURL = window.URL.createObjectURL(csvData);
+		}
+		var tempLink = document.createElement('a');
+		tempLink.href = csvURL;
+		tempLink.setAttribute('download', 'download.csv');
+		tempLink.click()
+	}
+
+	$("#download_csv").click(download_csv)
 
 	// run function when csv upload file selected
 	$("#csv-file").change(handleFileSelect)

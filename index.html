@@ -4,29 +4,32 @@
             <title>EDA Grants Viewer</title>
             <meta charset="UTF-8">
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>
-            <script src="https://code.highcharts.com/highcharts.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/1.5.3/numeral.min.js"></script>
             <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
             <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.2.1/math.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.11/js/jquery.dataTables.min.js"></script>
-            <script src="jquery.dataTables.yadcf.js"></script>
+            <script src="yadcf-0.8.9/jquery.dataTables.yadcf.js"></script>
+    		<script src="http://brianreavis.github.io/selectize.js/js/selectize.js" type="text/javascript" charset="utf-8"></script>
             <script src="counties_json2.js"></script>
             <script src="eda_grants_viewer.js"></script>
             <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,800,800italic,600italic,600,400italic,300italic,300' rel='stylesheet' type='text/css'>
             <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"/>
             <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css"/>
-            <link href="jquery.datatables.yadcf.css" rel="stylesheet" type="text/css" />
+            <link href="yadcf-0.8.9/jquery.datatables.yadcf.css" rel="stylesheet" type="text/css" />
+            <link rel="stylesheet" href="http://selectize.github.io/selectize.js/css/normalize.css">
+            <!-- when commented in, the styles.css sheet below makes h1 tags all lowercase, messes with title -->
+    		<!-- <link rel="stylesheet" href="http://selectize.github.io/selectize.js/css/styles.css"> -->
+    		<link rel="stylesheet" href="http://selectize.github.io/selectize.js/css/selectize.default.css" data-theme="default">
+    		<!-- <link href="selectize/selectize_default.css" rel="stylesheet" type="text/css"/> -->
+    		<link rel="stylesheet" href="eda_grants_viewer.css">
             <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-            <link rel="stylesheet" href="eda_grants_viewer.css">
       </head>
       <body>
 
       	<!-- nav tabs -->
-      	<div class="container">                 
+      	<div class="navbar_container">                 
 			<ul class="nav nav-tabs" role="tablist">
 				<li class="active"><a href="#nav_tab_data">Data</a></li>
 				<li><a href="#nav_tab_query">Query</a></li>
@@ -40,16 +43,25 @@
 			<div id="nav_tab_data" class="tab-pane fade in active">
 				<div>
 		            	<img class="alignimg" src="eda_logo.jpg" height="150" width="200">
-		            	<h1 class="alignleft">Grants Viewer<br /><span style="font-size:.8em; font-weight:normal;">EDA Performance and National Programs</span></h1>
+		            	<h1 class="alignleft">Grants Viewer<br />
+		            		<span style="font-size:.8em; font-weight:normal;">EDA Performance and National Programs</span>
+		            	</h1>
 	            	</div>
 		            <div style="clear: both;"></div>
-		            <br>
-		            <div>
-	            		<p>
-	            			<input type="file" id="csv-file" name="files"/>
-	            		</p>
+		            <div class="container">
+	            		<input type="file" id="csv-file" name="files"/>
 	            	</div>
 	            	<div style="clear: both;"></div>
+	            	<button id="download_csv" type="button" class="btn btn-primary">Download data</button>
+				<div class="container">
+					<div class="selectize_menu"> 
+						<label for="select_col_display">Select columns to display:</label>
+						<input id="select_col_display" type="text" class="demo-default" />
+						<div class="selectize_button">
+							<button id="display_column_button" type="button" class="btn btn-primary">Display selected columns</button>
+						</div>
+					</div>
+				</div>
 	            	<br>
 	            	<div>
 	            		<table id="csv-table" class="display" width="100%"></table>      
