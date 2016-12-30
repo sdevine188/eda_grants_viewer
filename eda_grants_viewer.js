@@ -11,6 +11,8 @@ var data_values_array_for_table = []
 var table
 var converted_csv
 var fake_data
+var table_data_obj_for_download
+
 
 
 $(document).ready(function(){
@@ -97,10 +99,12 @@ $(document).ready(function(){
 	function create_table() {
 		table = $('#csv-table').DataTable({
 		      	data: data_values_array_for_table,
+		      	dom: 'Bfrtip',
 		      	// stateSave: true,
 		      	lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
 		      	pageLength: 5,
-		      	columnDefs: column_def_for_table
+		      	columnDefs: column_def_for_table,
+		      	buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
 		})
 	}
 
@@ -124,6 +128,11 @@ $(document).ready(function(){
 		create_table()
 		add_filters()
 	}
+
+	// function convert_table_array_to_object() {
+	// 	for (i = 0; i < )
+	// 	table_data_obj_for_download
+	// }
 
 	function download_csv() {
 		console.log("download csv function")
@@ -166,6 +175,12 @@ $(document).ready(function(){
       	$(this).tab('show')
   	});
 
+
+
+
+
+
+
 	// create map
 	var map = L.map('map').setView([37.8, -96], 4)
 	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -186,7 +201,7 @@ $(document).ready(function(){
 		}
 	}
 
-	// build_criteria_select()
+	build_criteria_select()
 
 	// update map when criteria drop down is changed
 	$('.criteria').on("change", function() {
