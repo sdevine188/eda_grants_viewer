@@ -33,7 +33,7 @@ $(document).ready(function(){
 				convert_obj_to_array()
 				destroy_table()
 				create_table()
-				add_filters()
+				// add_filters()
 			}
 		});
 	}
@@ -47,9 +47,6 @@ $(document).ready(function(){
 		})
 		display_columns = ["Control.No.", "Status", "FY", "Program", "EDA.Funding", "Appl.Short.Name", "Project.Short.Descrip",
 			"Initiatives", "Appl.State.Abbr"]
-		// display_columns = ["proj_address", "Proj.ZIP", "Proj.ST.Abbr"]
-		// display_columns = ["Status", "FY", "Appropriation"]
-		// display_columns = ["Appropriation"]
 		var $select = $('#select_col_display').selectize({
 			maxItems: null,
 			valueField: "name",
@@ -126,43 +123,8 @@ $(document).ready(function(){
 		convert_obj_to_array()
 		destroy_table()
 		create_table()
-		add_filters()
+		// add_filters()
 	}
-
-	// function convert_table_array_to_object() {
-	// 	for (i = 0; i < )
-	// 	table_data_obj_for_download
-	// }
-
-	function download_csv() {
-		console.log("download csv function")
-		fake_data = [
-			{
-				"Column 1": "foo",
-				"Column 2": "bar"
-			},
-			{
-				"Column 1": "abc",
-				"Column 2": "def"
-			}
-		]
-
-		converted_csv = Papa.unparse(fake_data)
-
-		var csvData = new Blob([converted_csv], {type: 'text/csv;charset=utf-8;'});
-		var csvURL =  null;
-		if (navigator.msSaveBlob) {
-		    csvURL = navigator.msSaveBlob(csvData, 'download.csv');
-		} else {
-		    csvURL = window.URL.createObjectURL(csvData);
-		}
-		var tempLink = document.createElement('a');
-		tempLink.href = csvURL;
-		tempLink.setAttribute('download', 'download.csv');
-		tempLink.click()
-	}
-
-	$("#download_csv").click(download_csv)
 
 	// run function when csv upload file selected
 	$("#csv-file").change(handleFileSelect)
@@ -175,6 +137,31 @@ $(document).ready(function(){
       	$(this).tab('show')
   	});
 
+
+
+
+	// create datatable column filters
+	// Setup - add a text input to each footer cell
+	$('#csv-table tfoot th').each( function () {
+	  var title = $(this).text();
+	  $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+	} );
+
+	// DataTable
+	// var table = $('#csv-table').DataTable();
+
+	// Apply the search
+	table.columns().every( function () {
+	  var that = this;
+
+	  $( 'input', this.footer() ).on( 'keyup change', function () {
+	      if ( that.search() !== this.value ) {
+	          that
+	              .search( this.value )
+	              .draw();
+	      }
+	  } );
+	} );
 
 
 
